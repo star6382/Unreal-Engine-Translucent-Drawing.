@@ -1,0 +1,80 @@
+enum class EBlendMode : uint8
+{
+BLEND_Opaque = 0,
+BLEND_Masked = 1,
+BLEND_Translucent = 2,
+BLEND_Additive = 3,
+BLEND_Modulate = 4,
+BLEND_AlphaComposite = 5,
+BLEND_AlphaHoldout = 6,
+BLEND_MAX = 7,
+};
+
+
+char pad0021[0x70];
+UObject* DefaultTexture;
+
+char pad0022[0x78];
+UObject* GradientTexture;
+
+void K2_DrawTexture(UObject* RenderTexture, FVector2D ScreenPosition, FVector2D ScreenSize, FVector2D CoordinatePosition, FVector2D CoordinateSize, FLinearColor RenderColor, EBlendMode BlendMode, float Rotation, FVector2D PivotPoint)
+{
+static UObject* Func = nullptr;
+if (!Func)
+{
+Func = StaticFindObject<UObject*>(nullptr, nullptr, L"Canvas.K2_DrawTexture", false);
+}
+
+struct UCanvas_K2_DrawTexture_Params
+{
+public:
+UObject* RenderTexture;
+struct FVector2D ScreenPosition;
+struct FVector2D ScreenSize;
+struct FVector2D CoordinatePosition;
+struct FVector2D CoordinateSize;
+struct FLinearColor RenderColor;
+EBlendMode BlendMode;
+float Rotation;
+struct FVector2D PivotPoint;
+};
+
+UCanvas_K2_DrawTexture_Params Parms;
+
+Parms.RenderTexture = RenderTexture;
+Parms.ScreenPosition = ScreenPosition;
+Parms.ScreenSize = ScreenSize;
+Parms.CoordinatePosition = CoordinatePosition;
+Parms.CoordinateSize = CoordinateSize;
+Parms.RenderColor = RenderColor;
+Parms.BlendMode = BlendMode;
+Parms.Rotation = Rotation;
+Parms.PivotPoint = PivotPoint;
+
+UObject::ProcessEvent(Func, &Parms);
+}
+
+if (true)
+{
+
+// Set screen frist starts postion
+FVector2D ScreenPostion = { 0, 0 };
+
+// Set size of the texture
+FVector2D ScreenTextureSize = { 1920, 1080 };
+
+// Set position and size of the texture
+FVector2D CoordinatePosition = { 1920, 1080 };
+
+// Set coordinate size
+FVector2D CoordinateSize = { 0.f, 0.f };
+
+// Set rotation
+float rotation = 0.f;
+
+// Set pivot
+FVector2D PivotPoint = { 0.f, 0.f };
+
+
+  Canvas->K2_DrawTexture(Canvas->DefaultTexture, ScreenPostion, ScreenTextureSize, CoordinatePosition, CoordinateSize, FLinearColor{ 0.5f, 0.6f, 0.7f, 0.9f }, EBlendMode::BLEND_Translucent, rotation, PivotPoint);
+}
